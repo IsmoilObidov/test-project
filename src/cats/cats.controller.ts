@@ -8,11 +8,14 @@ import {
   HttpStatus,
   Param,
   HttpException,
+  ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 import { CreateCatDto } from './DTOs/create-cat.dto';
 import { CatsService } from './cats.service';
+import { Cat } from './interfaces/cat.interface';
 
 @Controller('cats')
 export class CatsController {
@@ -35,10 +38,10 @@ export class CatsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): number {
+  @UsePipes(new ParseIntPipe)
+  findOne(@Param('id') id: number): Cat {
     try {
-      
-      return parseInt(id) + 12;
+      return this.catsService.findOne(id);
     } catch (err) {
       console.log(err);
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
