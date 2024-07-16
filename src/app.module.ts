@@ -4,10 +4,30 @@ import { LoggerMiddleware } from './config/middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
-import { databaseProviders } from './database/database.providers';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { User } from './users/user.entity';
 
 @Module({
-  imports: [CatsModule, AuthModule, UsersModule, DatabaseModule],
+  imports: [
+    CatsModule,
+    AuthModule,
+    UsersModule,
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: '127.0.0.1',
+      port: 3306,
+      database: 'loba_kabinet',
+      username: 'root',
+      password: '',
+      entities: [User],
+      synchronize: false,
+      autoLoadEntities: false,
+    }),
+  ],
   providers: [
     {
       // actions before app starts
@@ -16,10 +36,9 @@ import { databaseProviders } from './database/database.providers';
         for (let i = 0; i < 10; i++) {
           console.log(i);
         }
-        console.log(databaseProviders);
-        
+        console.log(process.env.APP_ENV);
       },
-    }
+    },
   ],
 })
 export class AppModule implements NestModule {
