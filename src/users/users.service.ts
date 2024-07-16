@@ -5,12 +5,12 @@ import { Users } from './users.interface';
 export class UsersService {
   private readonly users = [
     {
-      id: 1,
+      userId: 1,
       username: 'john',
-      password: 'changeme',
+      password: 'reteryut10',
     },
     {
-      id: 2,
+      userId: 2,
       username: 'maria',
       password: 'guess',
     },
