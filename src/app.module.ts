@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { User } from './users/user.entity';
+import { PhotosModule } from './photos/photos.module';
 
 @Module({
   imports: [
@@ -15,18 +16,20 @@ import { User } from './users/user.entity';
     AuthModule,
     UsersModule,
     DatabaseModule,
+    PhotosModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',
       port: 3306,
-      database: 'loba_kabinet',
+      database: 'test',
       username: 'root',
       password: '',
       entities: [User],
-      synchronize: false,
-      autoLoadEntities: false,
+      synchronize: true,
+      autoLoadEntities: true,
     }),
+    PhotosModule,
   ],
   providers: [
     {
@@ -34,7 +37,7 @@ import { User } from './users/user.entity';
       provide: 'ASYNC_CONNECTION',
       useFactory: async () => {
         for (let i = 0; i < 10; i++) {
-          console.log(i);
+          console.log(i + 'ms');
         }
         console.log(process.env.APP_ENV);
       },
